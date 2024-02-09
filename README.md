@@ -5,7 +5,6 @@
 ---
 
 **Date:** 2024-02-08  
-**Copyright:** (C) 2024 by Burak Üstüner  
 **Email:** [burakustuner@gmail.com](mailto:burakustuner@gmail.com)  
 **GitHub:** [github.com/burakustuner](https://github.com/burakustuner)
 
