@@ -121,6 +121,13 @@ def xyz_tiler(config):
     qt_bin_path = os.path.join(config['qgis_main_path'], "apps", "qt5", "bin")
     os.environ['PATH'] += ";" + qgis_bin_path + ";" + qt_bin_path
 
+    # Dynamically setting the PYTHONHOME_PATH
+    python_home_path = os.path.join(config['qgis_main_path'], "apps", "Python39")
+    os.environ['PYTHONHOME'] = python_home_path
+
+    #Dynamically settting the PYTHONPPATH_PATH
+    python_path = os.path.join(config['qgis_main_path'], "apps", "Python39", "lib","site-packages")
+    os.environ['PYTHONPATH'] = python_path
 
 
     from qgis.core import (
