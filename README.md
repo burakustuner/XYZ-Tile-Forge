@@ -44,6 +44,6 @@ Run the script using a Python interpreter that has access to QGIS's libraries an
 The -i flag is for specifying the raster input file, and the -o flag is for specifying the output directory, -min flag is for specifying minimum zoom layer, -max flag is for specifiying maximum zoom layer.
 
 ```bash
-      "C:/Program Files/QGIS 3.28.15/bin/python.exe" "E:/Qgis/XYZ_Tiles/scrpits/main.py" -i "E:/Qgis/XYZ_Tiles/ayvalik/AYVALIK_ORT.ecw" -o "E:/Qgis/XYZ_Tiles/output" -min 7 -max 17
+  "C:/Program Files/QGIS 3.34.3/bin/python.exe" "E:/XYZ_Tiles/XYZ-Tile-Forge/main.py" -i "E:/XYZ_Tiles/originals/EPB/EB1/ayvalik" -o "E:/XYZ_Tiles/output" -min 7 -max 17
 
 ```

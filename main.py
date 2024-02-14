@@ -84,7 +84,7 @@ def main():
 
     # Parameters for xyz_tiler
     tiler_config = {
-        "qgis_main_path": "C:/Program Files/QGIS 3.28.15/",
+        "qgis_main_path": "C:/Program Files/QGIS 3.34.3/",
         "xyz_raster_path": args.input,
         "xyz_output_path": args.output,
         "xyz_zoom_min": args.minlayer,
