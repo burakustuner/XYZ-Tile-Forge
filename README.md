@@ -42,12 +42,12 @@ Ensure QGIS is installed on your system as the script relies on QGIS's Python en
 
 Run the script using a Python interpreter that has access to QGIS's libraries and processing framework. The following flags are used to specify script behavior:
 
--i: Path to the input raster file.
--o: Path to the output directory for XYZ tiles.
--min: Minimum zoom layer for XYZ tiles.
--max: Maximum zoom layer for XYZ tiles.
--zip: (Optional) Enable archiving of the output directory into a zip file.
--mark: (Optional) Watermark text to be applied to the tiles.
+- `-i`: Path to the input raster file.
+- `-o`: Path to the output directory for XYZ tiles.
+- `-min`: Minimum zoom layer for XYZ tiles.
+- `-max`: Maximum zoom layer for XYZ tiles.
+- `-zip`: (Optional) Enable archiving of the output directory into a zip file.
+- `-mark`: (Optional) Watermark text to be applied to the tiles.
 
 ```bash
 "C:/Program Files/QGIS 3.34.3/bin/python.exe" "E:/XYZ_Tiles/XYZ-Tile-Forge/main.py" -i "E:/XYZ_Tiles/originals/EPB/EB1/ayvalik/ayvalik_ort.ecw" -o "E:/XYZ_Tiles/output" -min 7 -max 17 -mark "2024" -zip 
