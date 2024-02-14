@@ -34,6 +34,8 @@ Ensure QGIS is installed on your system as the script relies on QGIS's Python en
   -PYTHONPATH = C:\Program Files\QGIS 3.28.15\apps\Python39\lib\site-packages
 - Adjust script parameters for dataset path, output directory, tile properties, and watermark specifications.
 - Install necessary Python packages, if required (this should not be necessary).
+- git config --global http.sslVerify false
+- git config --global http.sslVerify true
 
 ## Execution
 
