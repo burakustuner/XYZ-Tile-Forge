@@ -2,7 +2,7 @@
 """
 /***************************************************************************
                                  XYZ Tile Forge
- Automates the process of generating, cleaning, and watermarking XYZ tiles
+ Automates the process of generating, cleaning, watermarking, and archiving XYZ tiles
 
                               -------------------
         date                 : 2024-02-08
@@ -20,45 +20,54 @@
  * program free, share your modifications, or even learn from its inner   *
  * workings. For the full terms, check out the GPL on the Free Software   *
  * Foundation's website.                                                  *
-
+ *
  * Feel free to reach out if you have any questions, suggestions, or just *
  * want to chat about this project. I'm always open to discussing new     *
  * ideas, collaboration, or helping out where I can.                      *
  *                                                                        *
  ***************************************************************************/
-"""
 
-"""
- Description:
-     The XYZ Tile Forge script is designed to automate the process of generating XYZ tiles from a given raster dataset,
-     cleaning generated tiles based on file size criteria, and applying watermarks to the tiles.
-     It integrates with QGIS, a free and open-source geographic information system, to utilize its spatial data processing capabilities.
-   
-     The script is divided into three main functions:
-         - xyz_tiler: Generates XYZ tiles from a specified raster layer.
-         - xyz_tile_cleaner: Cleans the generated tiles by removing files below a specified size threshold.
-         - xyz_tile_watermarker: Adds a watermark to specified levels of tiles.
-
- Usage:
-     Ensure QGIS is installed on your system as the script relies on QGIS's Python environment and processing algorithms.
-     Modify the main.py script's parameters to match your project requirements and execute it from the command line or an IDE that supports Python.
-
- Preparation:
-     - Install QGIS and ensure it is properly configured.
-     - Set Python's PATH environment variable to include QGIS's bin directory. Be carefull to declare proper qgis version.
-        -PYTHONHOME =   C:\Program Files\QGIS 3.28.15\apps\Python39
-        -PYTHONPATH =   C:\Program Files\QGIS 3.28.15\apps\Python39\lib\site-packages
-     - Adjust script parameters for dataset path, output directory, tile properties, and watermark specifications.
-     - Install necessary Python packages, if required (this should not be necessary).
-
- Execution:
-     Run the script using a Python interpreter that has access to QGIS's libraries and processing framework.
-     The -i flag is for specifying the raster input file, and the -o flag is for specifying the output directory, -min flag is for specifying minimum zoom layer, -max flag is for specifiying maximum zoom layer.
-   
-     "C:/Program Files/QGIS 3.28.15/bin/python.exe" "E:/Qgis/XYZ_Tiles/scrpits/main.py" -i "E:/Qgis/XYZ_Tiles/ayvalik/AYVALIK_ORT.ecw" -o "E:/Qgis/XYZ_Tiles/output" -min 7 -max 17
- 
- Post-Processing:
-     Verify the generated tiles in the output directory, check for the application of watermarks, and ensure unwanted tiles were removed.
+/**
+ * Description:
+ *     The XYZ Tile Forge script is designed to automate the process of generating XYZ tiles from a given raster dataset,
+ *     cleaning generated tiles based on file size criteria, applying watermarks to the tiles, and archiving the processed
+ *     tiles for easy distribution or storage. It integrates with QGIS, a free and open-source geographic information system,
+ *     to utilize its spatial data processing capabilities.
+ *   
+ *     The script is divided into four main functions:
+ *         - xyz_tiler: Generates XYZ tiles from a specified raster layer.
+ *         - xyz_tile_cleaner: Cleans the generated tiles by removing files below a specified size threshold.
+ *         - xyz_tile_watermarker: Adds a watermark to specified levels of tiles.
+ *         - xyz_tile_archiver: Archives the processed tiles into a zip file for easy distribution or storage.
+ *
+ * Usage:
+ *     Ensure QGIS is installed on your system as the script relies on QGIS's Python environment and processing algorithms.
+ *     Modify the main.py script's parameters to match your project requirements and execute it from the command line or an IDE that supports Python.
+ *
+ * Preparation:
+ *     - Install QGIS and ensure it is properly configured.
+ *     - Set Python's PATH environment variable to include QGIS's bin directory. Be careful to declare the proper QGIS version.
+ *        -PYTHONHOME =   C:\Program Files\QGIS 3.28.15\apps\Python39
+ *        -PYTHONPATH =   C:\Program Files\QGIS 3.28.15\apps\Python39\lib\site-packages
+ *     - Adjust script parameters for dataset path, output directory, tile properties, and watermark specifications.
+ *     - Install necessary Python packages, if required (this should not be necessary).
+ *
+ * Execution:
+ *     Run the script using a Python interpreter that has access to QGIS's libraries and processing framework.
+ *     - The `-i` flag is for specifying the raster input file.
+ *     - The `-o` flag is for specifying the output directory where the XYZ tiles will be saved.
+ *     - The `-min` flag is for specifying the minimum zoom layer for the XYZ tiles.
+ *     - The `-max` flag is for specifying the maximum zoom layer for the XYZ tiles.
+ *     - The `-zip` flag is an optional flag; when used, it enables archiving of the output directory into a zip file for easy distribution or storage.
+ *     - The `-mark` flag is for specifying the watermark text to be applied to the tiles. This flag is optional and should be followed by the desired watermark text.
+ *   
+ *     For example, to generate tiles with a minimum zoom of 7 and a maximum zoom of 17, apply a watermark "2024", and zip the output directory, you would run:
+ *   
+ *     "C:/Program Files/QGIS 3.34.3/bin/python.exe" "E:/XYZ_Tiles/XYZ-Tile-Forge/main.py" -i "E:/XYZ_Tiles/originals/EPB/EB1/ayvalik/ayvalik_ort.ecw" -o "E:/XYZ_Tiles/output" -min 7 -max 17 -zip -mark "2024"
+ * 
+ * Post-Processing:
+ *     Verify the generated tiles in the output directory, check for the application of watermarks, and ensure unwanted tiles were removed.
+ */
 """
 # main.py
 
@@ -68,6 +77,7 @@ from datetime import datetime
 from xyz_tiler import xyz_tiler
 from xyz_tile_cleaner import xyz_tile_cleaner
 from xyz_tile_watermarker import xyz_tile_watermarker
+from xyz_tile_archiver import xyz_tile_archiver
 
 def main():
     
@@ -77,11 +87,14 @@ def main():
     parser.add_argument('-o', '--output', required=True, help='Path to the output directory for XYZ tiles.')
     parser.add_argument('-min', '--minlayer', required=True, help= 'Minimum zoom layer for XYZ tiles.')
     parser.add_argument('-max', '--maxlayer', required=True, help='Maximum zoom layer for XYZ tiles.')
+    parser.add_argument('-mark', '--watermark', required=True, help='Watermark text to be applied')
+    parser.add_argument('-zip', '--zip', action='store_true', help='Enable archiving of the output directory into a zip file.')  # Sıkıştırma opsiyonu eklendi
 
 
     # Parsing the arguments
     args = parser.parse_args()
 
+    
     # Parameters for xyz_tiler
     tiler_config = {
         "qgis_main_path": "C:/Program Files/QGIS 3.34.3/",
@@ -119,7 +132,8 @@ def main():
     watermarker_config = {
         "watermark_directory":tiler_config['xyz_output_path'],
         #"watermark_directory": "E:/XYZ_Tiles/output",
-        "watermark_text": "@BOTAS 2024",
+        "watermark_text": args.watermark,
+        #"watermark_text": "@BOTAS 2024",
         "watermark_layer_levels": [14,15,17],
         "watermark_font_path": "arial.ttf",
         "watermark_font_size": 10,
@@ -129,11 +143,27 @@ def main():
         "watermark_frequency": 5
     }
 
+    zipper_config = {
+    "archive_path": tiler_config['xyz_output_path'],  # Directory to be zipped
+    "zip_file_path": f"{tiler_config['xyz_output_path']}/archive.zip"  # Destination for the zip file
+
+    }
+
     # Call the functions
     start_time = datetime.now()
     xyz_tiler(tiler_config)
     xyz_tile_cleaner(cleaner_config)
-    xyz_tile_watermarker(watermarker_config)
+    if args.watermark:
+        xyz_tile_watermarker(watermarker_config)
+    else:
+        print("No watermark text specified. Proceeding without watermarking. [-mark 'example']")
+
+    if args.zip:
+        xyz_tile_archiver(zipper_config)
+    else:
+        # skip zip process
+        print("Archiving (zipping) step is skipped as per the command line option [-zip].")
+
     end_time = datetime.now()
     elapsed_time = end_time - start_time
     hours, remainder = divmod(elapsed_time.total_seconds(), 3600)
