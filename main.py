@@ -61,11 +61,7 @@
 import sys
 import argparse
 from datetime import datetime
-# Add the path to QGIS Python libraries
-sys.path.extend([
-    'C:/Program Files/QGIS 3.34.3/apps/qgis/python',
-    'C:/Program Files/QGIS 3.34.3/apps/Python39/lib/site-packages',
-])
+
 from xyz_tiler import xyz_tiler
 from xyz_tile_cleaner import xyz_tile_cleaner
 from xyz_tile_watermarker import xyz_tile_watermarker
@@ -82,7 +78,7 @@ def main():
 
     # Parameters for xyz_tiler
     tiler_config = {
-        "qgis_main_path": "C:/Program Files/QGIS 3.34.3/",
+        "qgis_main_path": "C:/Program Files/QGIS 3.28.15/",
         "xyz_raster_path": args.input,
         "xyz_output_path": args.output,
         #"xyz_raster_path": "E:/XYZ_Tiles/ayvalik/AYVALIK_ORT.ecw",

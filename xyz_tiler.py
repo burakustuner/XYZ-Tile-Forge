@@ -78,24 +78,48 @@ from qgis.analysis import QgsNativeAlgorithms
 import sys
 import os
 
+def get_qgis_path(base_path, sub_path):
+    # Attempt to use the qgis-ltr directory first
+    qgis_ltr_path = os.path.join(base_path, "apps", "qgis-ltr", sub_path)
+    if os.path.exists(qgis_ltr_path):
+        return qgis_ltr_path
+    # Fallback to the qgis directory if qgis-ltr does not exist
+    qgis_path = os.path.join(base_path, "apps", "qgis", sub_path)
+    if os.path.exists(qgis_path):
+        return qgis_path
+    # Raise an error if neither path exists
+    raise FileNotFoundError(f"Neither qgis-ltr nor qgis directory found in {base_path}")
+
+
 def xyz_tiler(config):
     # The QGIS Python library is accessed by adding the QGIS Python path to sys.path.
     qgis_path = config['qgis_main_path']+"apps/Python39"
     if qgis_path not in sys.path:
         sys.path.append(qgis_path)
 
-    qgis_python_path = config['qgis_main_path']+"apps/qgis/python"
+    qgis_python_path = get_qgis_path(config['qgis_main_path'], "python")
     if qgis_python_path not in sys.path:
         sys.path.append(qgis_python_path)
 
-    qgis_plugins_path = config['qgis_main_path']+"apps/qgis/python/plugins"
+    qgis_plugins_path = get_qgis_path(config['qgis_main_path'], "python/plugins")
     if qgis_plugins_path not in sys.path:
         sys.path.append(qgis_plugins_path)
+    
+    qgis_packages_path =  os.path.join(config['qgis_main_path'], "apps", "Python39", "lib", "site-packages")
+    if qgis_packages_path not in sys.path:
+        sys.path.append(qgis_packages_path)
 
 
     # Set environment variables for other QGIS and PyQt5 components
-    os.environ['QT_QPA_PLATFORM_PLUGIN_PATH'] = config['qgis_main_path']+"apps/qt5/plugins"
-    os.environ['PATH'] += ";" + config['qgis_main_path']+"apps/qgis/bin;" + config['qgis_main_path'] +"apps/qt5/bin"
+        
+    # Dynamically setting the QT_QPA_PLATFORM_PLUGIN_PATH
+    qt_plugin_path = os.path.join(config['qgis_main_path'], "apps", "qt5", "plugins")
+    os.environ['QT_QPA_PLATFORM_PLUGIN_PATH'] = qt_plugin_path
+
+   # Dynamically adding to the PATH environment variable
+    qgis_bin_path = get_qgis_path(config['qgis_main_path'], "bin")  # Adjust get_qgis_path if necessary to handle this case
+    qt_bin_path = os.path.join(config['qgis_main_path'], "apps", "qt5", "bin")
+    os.environ['PATH'] += ";" + qgis_bin_path + ";" + qt_bin_path
 
 
 
@@ -110,7 +134,9 @@ def xyz_tiler(config):
     from qgis.analysis import QgsNativeAlgorithms
 
     # Starting the QGIS application
-    QgsApplication.setPrefixPath(config['qgis_main_path'] +"apps/qgis-ltr", True)
+    qgis_prefix_path = get_qgis_path(config['qgis_main_path'])
+    QgsApplication.setPrefixPath(qgis_prefix_path, True)
+
     qgs = QgsApplication([], False) # QGIS is started without a GUI when set to False. If true, it opens a GUI.
     qgs.initQgis()
     
