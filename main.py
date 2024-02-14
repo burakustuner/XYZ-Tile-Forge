@@ -87,7 +87,7 @@ def main():
     parser.add_argument('-o', '--output', required=True, help='Path to the output directory for XYZ tiles.')
     parser.add_argument('-min', '--minlayer', required=True, help= 'Minimum zoom layer for XYZ tiles.')
     parser.add_argument('-max', '--maxlayer', required=True, help='Maximum zoom layer for XYZ tiles.')
-    parser.add_argument('-mark', '--watermark', required=True, help='Watermark text to be applied')
+    parser.add_argument('-mark', '--watermark', required=False, help='Watermark text to be applied')
     parser.add_argument('-zip', '--zip', action='store_true', help='Enable archiving of the output directory into a zip file.')  # Sıkıştırma opsiyonu eklendi
 
 
