@@ -51,13 +51,16 @@
 
  Execution:
      Run the script using a Python interpreter that has access to QGIS's libraries and processing framework.
-    "C:/Program Files/QGIS 3.34.3/bin\python.exe" "E:/XYZ_Tiles/scripts/main.py"
+     The -i flag is for specifying the raster input file, and the -o flag is for specifying the output directory.
+    "C:/Program Files/QGIS 3.34.3/bin/python.exe" "E:/XYZ_Tiles/scripts/main.py" -i "E:/XYZ_Tiles/ayvalik/AYVALIK_ORT.ecw" -o "E:/XYZ_Tiles/output"
 
  Post-Processing:
      Verify the generated tiles in the output directory, check for the application of watermarks, and ensure unwanted tiles were removed.
 """
 # main.pya
 import sys
+import argparse
+from datetime import datetime
 # Add the path to QGIS Python libraries
 sys.path.extend([
     'C:/Program Files/QGIS 3.34.3/apps/qgis/python',
@@ -68,11 +71,22 @@ from xyz_tile_cleaner import xyz_tile_cleaner
 from xyz_tile_watermarker import xyz_tile_watermarker
 
 def main():
+    
+    # Creating the argument parser
+    parser = argparse.ArgumentParser(description='XYZ Tile Forge: Automates the process of generating, cleaning, and watermarking XYZ tiles.')
+    parser.add_argument('-i', '--input', required=True, help='Path to the input raster file.')
+    parser.add_argument('-o', '--output', required=True, help='Path to the output directory for XYZ tiles.')
+
+    # Parsing the arguments
+    args = parser.parse_args()
+
     # Parameters for xyz_tiler
     tiler_config = {
         "qgis_main_path": "C:/Program Files/QGIS 3.34.3/",
-        "xyz_raster_path": "E:/XYZ_Tiles/ayvalik/AYVALIK_ORT.ecw",
-        "xyz_output_path": "E:/XYZ_Tiles/output",
+        "xyz_raster_path": args.input,
+        "xyz_output_path": args.output,
+        #"xyz_raster_path": "E:/XYZ_Tiles/ayvalik/AYVALIK_ORT.ecw",
+        #"xyz_output_path": "E:/XYZ_Tiles/output",
         "xyz_zoom_min": 1,
         "xyz_zoom_max": 20,
         "xyz_tile_format": 0,  # 0 for PNG, 1 for JPG
@@ -112,11 +126,15 @@ def main():
     }
 
     # Call the functions
+    start_time = datetime.now()
     xyz_tiler(tiler_config)
     xyz_tile_cleaner(cleaner_config)
     xyz_tile_watermarker(watermarker_config)
-
-    print("All processes have been successfully completed.")
+    end_time = datetime.now()
+    elapsed_time = end_time - start_time
+    hours, remainder = divmod(elapsed_time.total_seconds(), 3600)
+    minutes, seconds = divmod(remainder, 60)
+    print(f"All processes have been successfully completed in '{int(hours)} hour {int(minutes)} min {int(seconds)} sec'.")
 
 if __name__ == "__main__":
     main()
