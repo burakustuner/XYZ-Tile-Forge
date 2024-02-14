@@ -17,6 +17,7 @@ Feel free to reach out if you have any questions, suggestions, or just want to c
 The XYZ Tile Forge script is designed to automate the process of generating XYZ tiles from a given raster dataset, cleaning generated tiles based on file size criteria, and applying watermarks to the tiles. It integrates with QGIS, a free and open-source geographic information system, to utilize its spatial data processing capabilities.
 
 The script is divided into three main functions:
+
 - **xyz_tiler:** Generates XYZ tiles from a specified raster layer.
 - **xyz_tile_cleaner:** Cleans the generated tiles by removing files below a specified size threshold.
 - **xyz_tile_watermarker:** Adds a watermark to specified levels of tiles.
@@ -28,6 +29,9 @@ Ensure QGIS is installed on your system as the script relies on QGIS's Python en
 ## Preparation
 
 - Install QGIS and ensure it is properly configured.
+- Set Python's PATH environment variable to include QGIS's bin directory. Be carefull to declare proper qgis version.
+  -PYTHONHOME = C:\Program Files\QGIS 3.28.15\apps\Python39
+  -PYTHONPATH = C:\Program Files\QGIS 3.28.15\apps\Python39\lib\site-packages
 - Adjust script parameters for dataset path, output directory, tile properties, and watermark specifications.
 - Install necessary Python packages, if required (this should not be necessary).
 
@@ -35,5 +39,9 @@ Ensure QGIS is installed on your system as the script relies on QGIS's Python en
 
 Run the script using a Python interpreter that has access to QGIS's libraries and processing framework.
 
+The -i flag is for specifying the raster input file, and the -o flag is for specifying the output directory, -min flag is for specifying minimum zoom layer, -max flag is for specifiying maximum zoom layer.
+
 ```bash
-"C:/Program Files/QGIS 3.34.3/bin/python.exe" "E:/XYZ_Tiles/scripts/main.py"
+      "C:/Program Files/QGIS 3.28.15/bin/python.exe" "E:/Qgis/XYZ_Tiles/scrpits/main.py" -i "E:/Qgis/XYZ_Tiles/ayvalik/AYVALIK_ORT.ecw" -o "E:/Qgis/XYZ_Tiles/output" -min 7 -max 17
+
+```

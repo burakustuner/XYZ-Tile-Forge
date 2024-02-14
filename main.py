@@ -6,7 +6,6 @@
 
                               -------------------
         date                 : 2024-02-08
-        copyright            : (C) 2024 by burakustuner
         email                : burakustuner@gmail.com
         github               : github.com/burakustuner
  ***************************************************************************/
@@ -46,19 +45,23 @@
 
  Preparation:
      - Install QGIS and ensure it is properly configured.
+     - Set Python's PATH environment variable to include QGIS's bin directory. Be carefull to declare proper qgis version.
+        -PYTHONHOME =   C:\Program Files\QGIS 3.28.15\apps\Python39
+        -PYTHONPATH =   C:\Program Files\QGIS 3.28.15\apps\Python39\lib\site-packages
      - Adjust script parameters for dataset path, output directory, tile properties, and watermark specifications.
      - Install necessary Python packages, if required (this should not be necessary).
 
  Execution:
      Run the script using a Python interpreter that has access to QGIS's libraries and processing framework.
-     The -i flag is for specifying the raster input file, and the -o flag is for specifying the output directory.
-    "C:/Program Files/QGIS 3.34.3/bin/python.exe" "E:/XYZ_Tiles/scripts/main.py" -i "E:/XYZ_Tiles/ayvalik/AYVALIK_ORT.ecw" -o "E:/XYZ_Tiles/output"
-
+     The -i flag is for specifying the raster input file, and the -o flag is for specifying the output directory, -min flag is for specifying minimum zoom layer, -max flag is for specifiying maximum zoom layer.
+   
+     "C:/Program Files/QGIS 3.28.15/bin/python.exe" "E:/Qgis/XYZ_Tiles/scrpits/main.py" -i "E:/Qgis/XYZ_Tiles/ayvalik/AYVALIK_ORT.ecw" -o "E:/Qgis/XYZ_Tiles/output" -min 7 -max 17
+ 
  Post-Processing:
      Verify the generated tiles in the output directory, check for the application of watermarks, and ensure unwanted tiles were removed.
 """
-# main.pya
-import sys
+# main.py
+
 import argparse
 from datetime import datetime
 
@@ -72,6 +75,9 @@ def main():
     parser = argparse.ArgumentParser(description='XYZ Tile Forge: Automates the process of generating, cleaning, and watermarking XYZ tiles.')
     parser.add_argument('-i', '--input', required=True, help='Path to the input raster file.')
     parser.add_argument('-o', '--output', required=True, help='Path to the output directory for XYZ tiles.')
+    parser.add_argument('-min', '--minlayer', required=True, help= 'Minimum zoom layer for XYZ tiles.')
+    parser.add_argument('-max', '--maxlayer', required=True, help='Maximum zoom layer for XYZ tiles.')
+
 
     # Parsing the arguments
     args = parser.parse_args()
@@ -81,10 +87,12 @@ def main():
         "qgis_main_path": "C:/Program Files/QGIS 3.28.15/",
         "xyz_raster_path": args.input,
         "xyz_output_path": args.output,
+        "xyz_zoom_min": args.minlayer,
+        "xyz_zoom_max": args.maxlayer,
         #"xyz_raster_path": "E:/XYZ_Tiles/ayvalik/AYVALIK_ORT.ecw",
         #"xyz_output_path": "E:/XYZ_Tiles/output",
-        "xyz_zoom_min": 1,
-        "xyz_zoom_max": 20,
+        #"xyz_zoom_min": 1,
+        #"xyz_zoom_max": 17,
         "xyz_tile_format": 0,  # 0 for PNG, 1 for JPG
         "xyz_dpi": 96,
         "xyz_background_color": '#FFFFFF00',
@@ -111,7 +119,7 @@ def main():
     watermarker_config = {
         "watermark_directory":tiler_config['xyz_output_path'],
         #"watermark_directory": "E:/XYZ_Tiles/output",
-        "watermark_text": "@2024",
+        "watermark_text": "@BOTAS 2024",
         "watermark_layer_levels": [14,15,17],
         "watermark_font_path": "arial.ttf",
         "watermark_font_size": 10,

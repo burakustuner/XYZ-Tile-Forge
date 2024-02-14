@@ -15,7 +15,6 @@
 
                               -------------------
         date                 : 2024-02-08
-        copyright            : (C) 2024 by burakustuner
         email                : burakustuner@gmail.com
         github               : github.com/burakustuner
  ***************************************************************************/
@@ -71,13 +70,9 @@ Notes:
     - The script's performance depends on the size of the raster dataset and the system's specifications.
 """
 
-# Import necessary libraries from QGIS Python API
-from qgis.core import QgsApplication, QgsProcessingFeedback, QgsRasterLayer
-from qgis.analysis import QgsNativeAlgorithms
-
 import sys
 import os
-
+    # Determine if the qgis or qgis-ltr version installed on system.
 def get_qgis_path(base_path, sub_path):
     # Attempt to use the qgis-ltr directory first
     qgis_ltr_path = os.path.join(base_path, "apps", "qgis-ltr", sub_path)
@@ -109,7 +104,6 @@ def xyz_tiler(config):
     if qgis_packages_path not in sys.path:
         sys.path.append(qgis_packages_path)
 
-
     # Set environment variables for other QGIS and PyQt5 components
         
     # Dynamically setting the QT_QPA_PLATFORM_PLUGIN_PATH
@@ -129,7 +123,8 @@ def xyz_tiler(config):
     python_path = os.path.join(config['qgis_main_path'], "apps", "Python39", "lib","site-packages")
     os.environ['PYTHONPATH'] = python_path
 
-
+    # Import necessary libraries from QGIS Python API
+    from qgis.analysis import QgsNativeAlgorithms
     from qgis.core import (
         QgsApplication,
         QgsProject,    
@@ -138,10 +133,9 @@ def xyz_tiler(config):
         QgsCoordinateTransform,
         QgsCoordinateReferenceSystem
     )
-    from qgis.analysis import QgsNativeAlgorithms
 
     # Starting the QGIS application
-    qgis_prefix_path = get_qgis_path(config['qgis_main_path'])
+    qgis_prefix_path = get_qgis_path(config['qgis_main_path'], "")
     QgsApplication.setPrefixPath(qgis_prefix_path, True)
 
     qgs = QgsApplication([], False) # QGIS is started without a GUI when set to False. If true, it opens a GUI.

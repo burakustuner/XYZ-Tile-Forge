@@ -11,7 +11,6 @@
 
                               -------------------
         date                 : 2024-02-08
-        copyright            : (C) 2024 by burakustuner
         email                : burakustuner@gmail.com
         github               : github.com/burakustuner
  ***************************************************************************/
