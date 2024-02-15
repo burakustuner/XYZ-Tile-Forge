@@ -96,10 +96,6 @@ def main():
     # Parsing the arguments
     args = parser.parse_args()
 
-    # Setting up logging
-    log_file = os.path.join(args.output, 'Forge_Log.txt')
-    logging.basicConfig(filename=log_file, level=logging.INFO,
-                        format='%(asctime)s - %(levelname)s - %(message)s')
 
 
     # Parameters for xyz_tiler
@@ -113,7 +109,7 @@ def main():
         #"xyz_output_path": "E:/XYZ_Tiles/output",
         #"xyz_zoom_min": 1,
         #"xyz_zoom_max": 17,
-        "xyz_tile_format": 0,  # 0 for PNG, 1 for JPG
+        "xyz_tile_format": 1,  # 0 for PNG, 1 for JPG
         "xyz_dpi": 96,
         "xyz_background_color": '#FFFFFF00',
         "xyz_quality": 74,
@@ -130,7 +126,7 @@ def main():
     cleaner_config = {
         "clear_zoom_min": 1,
         "clear_zoom_max": 25,
-        "clear_size_min": 5169,  # 1711 for jpeg_19, 5169 for png_19
+        "clear_size_min": 1711,  # 1711 for jpeg_19, 5169 for png_19
         "clear_path": tiler_config['xyz_output_path']
         #"clear_path": "E:/XYZ_Tiles/output"
     }
@@ -177,6 +173,11 @@ def main():
     minutes, seconds = divmod(remainder, 60)
     print(f"All processes have been successfully completed in '{int(hours)} hour {int(minutes)} min {int(seconds)} sec'.")
     
+    # Setting up logging
+    log_file = os.path.join(args.output, 'Forge_Log.txt')
+    logging.basicConfig(filename=log_file, level=logging.INFO,
+                        format='%(asctime)s - %(levelname)s - %(message)s')
+
     # Log the parameters
     logging.info(f"Input file: {args.input}")
     logging.info(f"Output directory: {args.output}")
