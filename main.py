@@ -73,6 +73,7 @@
 
 import argparse
 from datetime import datetime
+import logging
 
 from xyz_tiler import xyz_tiler
 from xyz_tile_cleaner import xyz_tile_cleaner
@@ -94,7 +95,11 @@ def main():
     # Parsing the arguments
     args = parser.parse_args()
 
-    
+    # Setting up logging
+    logging.basicConfig(filename='Forge_Log.txt', level=logging.INFO,
+                        format='%(asctime)s - %(levelname)s - %(message)s')
+
+
     # Parameters for xyz_tiler
     tiler_config = {
         "qgis_main_path": "C:/Program Files/QGIS 3.34.3/",
@@ -169,6 +174,14 @@ def main():
     hours, remainder = divmod(elapsed_time.total_seconds(), 3600)
     minutes, seconds = divmod(remainder, 60)
     print(f"All processes have been successfully completed in '{int(hours)} hour {int(minutes)} min {int(seconds)} sec'.")
+    
+    # Log the parameters
+    logging.info(f"Input file: {args.input}")
+    logging.info(f"Output directory: {args.output}")
+    logging.info(f"Minimum zoom layer: {args.minlayer}")
+    logging.info(f"Maximum zoom layer: {args.maxlayer}")
+    logging.info(f"All processes have been successfully completed in '{int(hours)} hour {int(minutes)} min {int(seconds)} sec'.")
+
 
 if __name__ == "__main__":
     main()
