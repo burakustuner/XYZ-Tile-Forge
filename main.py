@@ -112,7 +112,7 @@ def main():
         "xyz_tile_format": 1,  # 0 for PNG, 1 for JPG
         "xyz_dpi": 96,
         "xyz_background_color": '#FFFFFF00',
-        "xyz_quality": 74,
+        "xyz_quality": 85,
         "xyz_metatilesize": 4,
         "xyz_tile_width": 256,
         "xyz_tile_height": 256,
@@ -137,13 +137,15 @@ def main():
         #"watermark_directory": "E:/XYZ_Tiles/output",
         "watermark_text": args.watermark,
         #"watermark_text": "@BOTAS 2024",
-        "watermark_layer_levels": [14,15,17],
+        "watermark_layer_levels": [14,15,18,19],
         "watermark_font_path": "arial.ttf",
-        "watermark_font_size": 10,
-        "watermark_text_color": (255, 255, 255, 10),
-        "watermark_margin_left": 10,
-        "watermark_margin_bottom": 10,
-        "watermark_frequency": 5
+        "watermark_font_size": 9, #10 for png
+        "watermark_text_color": (255, 255, 255), # (255, 255, 255, 10), for png
+        "watermark_margin_left": 5, #10 for png 
+        "watermark_margin_bottom": 50, #10 for png
+        "watermark_frequency": 6,
+        "watermark_stroke_width":1, # Konturun kalınlığını ayarlayın
+        "watermark_stroke_fill":(0,0,0)  # Konturun rengini belirleyin
     }
 
     zipper_config = {

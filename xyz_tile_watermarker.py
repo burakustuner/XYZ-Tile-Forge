@@ -72,12 +72,14 @@ def xyz_tile_watermarker(config):
     watermark_margin_left = config['watermark_margin_left']
     watermark_margin_bottom = config['watermark_margin_bottom']
     watermark_frequency = config['watermark_frequency']
+    watermark_stroke_width = config['watermark_stroke_width']
+    watermark_stroke_fill = config['watermark_stroke_fill']
 
     # Function to add watermark to an image
-    def add_watermark_to_image(image_path, text, position, font, color):
+    def add_watermark_to_image(image_path, text, position, font, color, stroke_width, stroke_fill):
         with Image.open(image_path) as img:
             drawable = ImageDraw.Draw(img)
-            drawable.text(position, text, fill=color, font=font)
+            drawable.text(position, text, fill=color, font=font, stroke_width=stroke_width, stroke_fill=stroke_fill)
             img.save(image_path)
 
     # Function to process all images in a directory
@@ -96,7 +98,7 @@ def xyz_tile_watermarker(config):
                     img = Image.open(file_path)
 
                     position = (watermark_margin_left, img.height - watermark_margin_bottom)
-                    add_watermark_to_image(file_path, watermark_text, position, font, watermark_text_color)
+                    add_watermark_to_image(file_path, watermark_text, position, font, watermark_text_color,watermark_stroke_width,watermark_stroke_fill)
                     img.close()
                     print(f"Watermark added to {file_path}")
 
@@ -122,6 +124,8 @@ if __name__ == "__main__":
         'watermark_text_color': (255, 255, 255, 10),  # RGBA
         'watermark_margin_left': 10,
         'watermark_margin_bottom': 10,
-        'watermark_frequency': 5
+        'watermark_frequency': 5,
+        'watermark_stroke_width': 2,  # Kontur genişliği
+        'watermark_stroke_fill': (0, 0, 0)  # Kontur rengi
     }
     xyz_tile_watermarker(config)
