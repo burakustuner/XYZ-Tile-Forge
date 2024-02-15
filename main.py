@@ -74,6 +74,7 @@
 import argparse
 from datetime import datetime
 import logging
+import os
 
 from xyz_tiler import xyz_tiler
 from xyz_tile_cleaner import xyz_tile_cleaner
@@ -96,7 +97,8 @@ def main():
     args = parser.parse_args()
 
     # Setting up logging
-    logging.basicConfig(filename='Forge_Log.txt', level=logging.INFO,
+    log_file = os.path.join(args.output, 'Forge_Log.txt')
+    logging.basicConfig(filename=log_file, level=logging.INFO,
                         format='%(asctime)s - %(levelname)s - %(message)s')
 
 
