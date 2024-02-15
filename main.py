@@ -139,7 +139,7 @@ def main():
         #"watermark_text": "@BOTAS 2024",
         "watermark_layer_levels": [14,15,18,19],
         "watermark_font_path": "arial.ttf",
-        "watermark_font_size": 9, #10 for png
+        "watermark_font_size": 10, #10 for png
         "watermark_text_color": (255, 255, 255), # (255, 255, 255, 10), for png
         "watermark_margin_left": 5, #10 for png 
         "watermark_margin_bottom": 50, #10 for png
