@@ -126,7 +126,7 @@ def main():
     cleaner_config = {
         "clear_zoom_min": 1,
         "clear_zoom_max": 25,
-        "clear_size_min": 1711,  # 1711 for jpeg_19, 5169 for png_19
+        "clear_size_min": 1800,  # 1800 for jpeg 85, 5169 for png
         "clear_path": tiler_config['xyz_output_path']
         #"clear_path": "E:/XYZ_Tiles/output"
     }
@@ -144,8 +144,8 @@ def main():
         "watermark_margin_left": 5, #10 for png 
         "watermark_margin_bottom": 50, #10 for png
         "watermark_frequency": 6,
-        "watermark_stroke_width":1, # Konturun kalınlığını ayarlayın
-        "watermark_stroke_fill":(0,0,0)  # Konturun rengini belirleyin
+        "watermark_stroke_width":1, # Konturun kalınlığını ayarla
+        "watermark_stroke_fill":(0,0,0)  # Konturun rengini belirle
     }
 
     zipper_config = {
