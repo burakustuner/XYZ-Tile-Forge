@@ -80,6 +80,7 @@ from xyz_tiler import xyz_tiler
 from xyz_tile_cleaner import xyz_tile_cleaner
 from xyz_tile_watermarker import xyz_tile_watermarker
 from xyz_tile_archiver import xyz_tile_archiver
+from xyz_tile_pathsaver import xyz_tile_pathsaver
 
 def main():
     
@@ -91,7 +92,7 @@ def main():
     parser.add_argument('-max', '--maxlayer', required=True, help='Maximum zoom layer for XYZ tiles.')
     parser.add_argument('-mark', '--watermark', required=False, help='Watermark text to be applied')
     parser.add_argument('-zip', '--zip', action='store_true', help='Enable archiving of the output directory into a zip file.')  # Sıkıştırma opsiyonu eklendi
-
+    parser.add_argument('-plog', '--pathlog', action='store_true', help='Enable creating a pathway list of xyz tiles.')
 
     # Parsing the arguments
     args = parser.parse_args()
@@ -112,7 +113,7 @@ def main():
         "xyz_tile_format": 1,  # 0 for PNG, 1 for JPG
         "xyz_dpi": 96,
         "xyz_background_color": '#FFFFFF00',
-        "xyz_quality": 85,
+        "xyz_quality": 95,
         "xyz_metatilesize": 4,
         "xyz_tile_width": 256,
         "xyz_tile_height": 256,
@@ -148,9 +149,13 @@ def main():
         "watermark_stroke_fill":(0,0,0)  # Konturun rengini belirle
     }
 
+    pathsaver_config = {
+        "scan_path":tiler_config['xyz_output_path'],
+    }
+
     zipper_config = {
-    "archive_path": tiler_config['xyz_output_path'],  # Directory to be zipped
-    "zip_file_path": f"{tiler_config['xyz_output_path']}/archive.zip"  # Destination for the zip file
+        "archive_path": tiler_config['xyz_output_path'],  # Directory to be zipped
+        "zip_file_path": f"{tiler_config['xyz_output_path']}/archive.zip"  # Destination for the zip file
 
     }
 
@@ -162,6 +167,11 @@ def main():
         xyz_tile_watermarker(watermarker_config)
     else:
         print("No watermark text specified. Proceeding without watermarking. [-mark 'example']")
+    
+    if args.pathlog:
+        xyz_tile_pathsaver(pathsaver_config)
+    else:
+        print("Path log step is skipped as per command line option [-plog].")
 
     if args.zip:
         xyz_tile_archiver(zipper_config)

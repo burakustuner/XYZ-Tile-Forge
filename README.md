@@ -16,12 +16,13 @@ Feel free to reach out if you have any questions, suggestions, or just want to c
 
 The XYZ Tile Forge script is designed to automate the process of generating XYZ tiles from a given raster dataset, cleaning generated tiles based on file size criteria, applying watermarks to the tiles, and archiving the processed tiles for easy distribution or storage. It integrates with QGIS, a free and open-source geographic information system, to utilize its spatial data processing capabilities.
 
-The script is divided into four main functions:
+The script is divided into five main functions:
 
 - **xyz_tiler:** Generates XYZ tiles from a specified raster layer.
 - **xyz_tile_cleaner:** Cleans the generated tiles by removing files below a specified size threshold.
 - **xyz_tile_watermarker:** Adds a watermark to specified levels of tiles.
 - **xyz_tile_archiver:**  Archives the processed tiles into a zip file for easy distribution or storage.
+- **xyz_tile_pathsaver:**  Saves paths of generated XYZ Tiles to a text file for ease of management.
 
 ## Usage
 
@@ -48,6 +49,7 @@ Run the script using a Python interpreter that has access to QGIS's libraries an
 - `-max`: Maximum zoom layer for XYZ tiles.
 - `-zip`: (Optional) Enable archiving of the output directory into a zip file.
 - `-mark`: (Optional) Watermark text to be applied to the tiles.
+- `-plog`: (Optional) Enable saving paths of generated XYZ tiles to a text file.
 
 ```bash
 "C:/Program Files/QGIS 3.34.3/bin/python.exe" "E:/XYZ_Tiles/XYZ-Tile-Forge/main.py" -i "E:/XYZ_Tiles/originals/EPB/EB1/ayvalik/ayvalik_ort.ecw" -o "E:/XYZ_Tiles/output" -min 7 -max 17 -mark "2024" -zip 
