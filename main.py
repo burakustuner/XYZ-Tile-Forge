@@ -155,7 +155,7 @@ def main():
 
     zipper_config = {
         "archive_path": tiler_config['xyz_output_path'],  # Directory to be zipped
-        "zip_file_path": f"{tiler_config['xyz_output_path']}/archive.zip"  # Destination for the zip file
+        "zip_file_path": f"{tiler_config['xyz_output_path']}/{os.path.basename(tiler_config['xyz_output_path'])}.zip"  # Destination for the zip file
 
     }
 
