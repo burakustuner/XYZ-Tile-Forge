@@ -73,55 +73,76 @@ Notes:
 import sys
 import os
     # Determine if the qgis or qgis-ltr version installed on system.
-def get_qgis_path(base_path, sub_path):
+def get_qgis_ltr(base_path, sub_path):
     # Attempt to use the qgis-ltr directory first
-    qgis_ltr_path = os.path.join(base_path, "apps", "qgis-ltr", sub_path)
-    if os.path.exists(qgis_ltr_path):
-        return qgis_ltr_path
-    # Fallback to the qgis directory if qgis-ltr does not exist
-    qgis_path = os.path.join(base_path, "apps", "qgis", sub_path)
-    if os.path.exists(qgis_path):
-        return qgis_path
-    # Raise an error if neither path exists
+    paths = ["qgis-ltr", "qgis"]
+    for path in paths:
+        full_path = os.path.join(base_path, "apps", path, sub_path)
+        if os.path.exists(full_path):
+            return full_path
     raise FileNotFoundError(f"Neither qgis-ltr nor qgis directory found in {base_path}")
 
 
-def xyz_tiler(config):
-    # The QGIS Python library is accessed by adding the QGIS Python path to sys.path.
-    qgis_path = config['qgis_main_path']+"apps/Python39"
-    if qgis_path not in sys.path:
-        sys.path.append(qgis_path)
+def add_to_sys_path(path):
+    """Append the given path to sys.path if it's not already included."""
+    if path not in sys.path:
+        sys.path.append(path)
+        print(path +" added to sys.path")
+    else:
+        print(path +" already in sys.path")
 
-    qgis_python_path = get_qgis_path(config['qgis_main_path'], "python")
-    if qgis_python_path not in sys.path:
-        sys.path.append(qgis_python_path)
-
-    qgis_plugins_path = get_qgis_path(config['qgis_main_path'], "python/plugins")
-    if qgis_plugins_path not in sys.path:
-        sys.path.append(qgis_plugins_path)
+def configure_qgis_paths(qgis_main_path):
+    """Configures paths related to QGIS to be included in Python's sys.path."""
+    # Define the base path for QGIS Python packages
+    paths = [
+        os.path.join(qgis_main_path, "apps", "Python39"),  # Main QGIS Python path
+        os.path.join(qgis_main_path, "apps", "Python39", "lib", "site-packages"),  # Site-packages path
+        get_qgis_ltr(qgis_main_path, "python"),  # General QGIS Python path
+        get_qgis_ltr(qgis_main_path, "python/plugins"),  # QGIS Python plugins path
+    ]
     
-    qgis_packages_path =  os.path.join(config['qgis_main_path'], "apps", "Python39", "lib", "site-packages")
-    if qgis_packages_path not in sys.path:
-        sys.path.append(qgis_packages_path)
+    # Append paths to sys.path
+    for path in paths:
+        add_to_sys_path(path)
 
+def set_environment_variable(key, value):
+    """Set or update an environment variable and notify about the change."""
+    if key in os.environ:
+        print(f"{key} environment variable updated.")
+    else:
+        print(f"{key} environment variable set.")
+    os.environ[key] = value
+
+def configure_environment_variables(qgis_main_path):
+    """Configure environment variables from a given configuration dictionary."""
+    qt_plugin_path = os.path.join(qgis_main_path, "apps", "qt5", "plugins")
+    qgis_bin_path = get_qgis_ltr(qgis_main_path, "bin")  # Assume get_qgis_path exists and handles input correctly
+    qt_bin_path = os.path.join(qgis_main_path, "apps", "qt5", "bin")
+    python_home_path = os.path.join(qgis_main_path, "apps", "Python39")
+    python_path = os.path.join(qgis_main_path, "apps", "Python39", "lib", "site-packages")
+
+    print(qt_plugin_path);
+    print(qgis_bin_path);
+    print(qt_bin_path);
+    print(python_home_path);
+    print(python_path);
+
+    env_vars = {
+        'QT_QPA_PLATFORM_PLUGIN_PATH': qt_plugin_path,
+        'PYTHONHOME': python_home_path,
+        'PYTHONPATH': python_path,
+        'PATH': os.environ.get('PATH', '') + ";" + qgis_bin_path + ";" + qt_bin_path
+    }
+    for key, value in env_vars.items():
+        set_environment_variable(key, value)
+
+def xyz_tiler(config):
+    print("Initializing QGIS paths...")
+    configure_qgis_paths(config['qgis_main_path'])
     # Set environment variables for other QGIS and PyQt5 components
-        
-    # Dynamically setting the QT_QPA_PLATFORM_PLUGIN_PATH
-    qt_plugin_path = os.path.join(config['qgis_main_path'], "apps", "qt5", "plugins")
-    os.environ['QT_QPA_PLATFORM_PLUGIN_PATH'] = qt_plugin_path
-
-   # Dynamically adding to the PATH environment variable
-    qgis_bin_path = get_qgis_path(config['qgis_main_path'], "bin")  # Adjust get_qgis_path if necessary to handle this case
-    qt_bin_path = os.path.join(config['qgis_main_path'], "apps", "qt5", "bin")
-    os.environ['PATH'] += ";" + qgis_bin_path + ";" + qt_bin_path
-
-    # Dynamically setting the PYTHONHOME_PATH
-    python_home_path = os.path.join(config['qgis_main_path'], "apps", "Python39")
-    os.environ['PYTHONHOME'] = python_home_path
-
-    #Dynamically settting the PYTHONPPATH_PATH
-    python_path = os.path.join(config['qgis_main_path'], "apps", "Python39", "lib","site-packages")
-    os.environ['PYTHONPATH'] = python_path
+    print("Setting environment variables for QT and Python...")    
+    configure_environment_variables(config['qgis_main_path'])
+    print("DONE...")   
 
     # Import necessary libraries from QGIS Python API
     from qgis.analysis import QgsNativeAlgorithms
@@ -135,28 +156,26 @@ def xyz_tiler(config):
     )
 
     # Starting the QGIS application
-    qgis_prefix_path = get_qgis_path(config['qgis_main_path'], "")
+    qgis_prefix_path = get_qgis_ltr(config['qgis_main_path'], "")
     QgsApplication.setPrefixPath(qgis_prefix_path, True)
 
     qgs = QgsApplication([], False) # QGIS is started without a GUI when set to False. If true, it opens a GUI.
     qgs.initQgis()
     
     # Loads the Processing framework.
-    import processing
+    from qgis import processing
     from processing.core.Processing import Processing
     Processing.initialize()
-    QgsApplication.processingRegistry().addProvider(QgsNativeAlgorithms())
+
+    #QgsApplication.processingRegistry().addProvider(QgsNativeAlgorithms())
 
     # Load the raster layer from provided path and check its validity
     raster_file = config['xyz_raster_path'] # Raster file path.
     raster_layer = QgsRasterLayer(raster_file, "raster")
 
-    if raster_layer.isValid() ==False:
-        print("Raster error...")
-        exit() # If the layer cannot be loaded, the script is terminated.
-
     if not raster_layer.isValid():
         print("Layer failed to load!")
+        exit() 
     else:
         # Converts the current coordinate reference system of the raster layer to the target CRS.
         source_crs = raster_layer.crs()
@@ -166,8 +185,7 @@ def xyz_tiler(config):
         transformed_extent = transform.transformBoundingBox(raster_layer.extent())
         # Sets the EXTENT parameter using the converted extent.
         extent_str = "{},{},{},{}".format(transformed_extent.xMinimum(), transformed_extent.xMaximum(),transformed_extent.yMinimum(),  transformed_extent.yMaximum())
-
-        print("extent in EPSG:4326= "+extent_str)
+        extent_parameter = extent_str2= extent_str+' '+ '[EPSG:4326]'
 
         # Prepare parameters for the XYZ tile generation    
         params = {
@@ -181,7 +199,7 @@ def xyz_tiler(config):
             'METATILESIZE': config['xyz_metatilesize'],
             'TILE_WIDTH': config['xyz_tile_width'],
             'TILE_HEIGHT': config['xyz_tile_height'],
-            'EXTENT':extent_str,
+            'EXTENT':extent_parameter,
             #'EXTENT': '26.973651074,27.002737108,39.455455330,39.472725163 [EPSG:4326]',
             'TMS_CONVENTION':config['xyz_tms_convention'],
             'HTML_TITLE':config['xyz_html_title'],
@@ -190,18 +208,16 @@ def xyz_tiler(config):
             'OUTPUT_DIRECTORY': config['xyz_output_path'],
             'OUTPUT_HTML': config['xyz_output_path']+'/preview.html'
         }
-        QgsProject.instance().setCrs(QgsCoordinateReferenceSystem(4326))
+
+        QgsProject.instance().setCrs(target_crs)
         QgsProject.instance().addMapLayer(raster_layer, True)
         # Starts process
         print("The XYZ Tile generation process is started. This may take some time, please be patient...")
 
         feedback = QgsProcessingFeedback()
-        result = processing.run("qgis:tilesxyzdirectory", params, feedback=feedback)
-        #print(result)
+        processing.run("qgis:tilesxyzdirectory", params, feedback=feedback)
+
         print("XYZ Tile generation process completed. All layers have been successfully created :)")
-
-
-
     # Terminates the QGIS application.
     qgs.exitQgis()
 
