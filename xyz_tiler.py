@@ -14,7 +14,7 @@
  across different resolutions.
 
                               -------------------
-        date                 : 2024-02-08
+        date                 : 2024-02
         email                : burakustuner@gmail.com
         github               : github.com/burakustuner
  ***************************************************************************/

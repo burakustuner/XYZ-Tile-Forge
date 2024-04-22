@@ -1,22 +1,17 @@
 """
 /***************************************************************************
                                 XYZ Tile Cleaner
- Cleans generated XYZ tiles by removing files below a specified size threshold.
+ The script seek through directories for given zoom levels, checking each tile's
+ file size against the threshold. Tiles smaller than the threshold are deleted.
 
  The XYZ Tile Cleaner script is designed to optimize tile storage by deleting
- tiles that fall below a minimum file size. This is particularly useful for
- removing empty or nearly empty tiles that do not contribute meaningful data to
- the map. By specifying minimum file size and zoom level range, users can
- precisely target and remove unnecessary tiles, reducing storage requirements
- and potentially improving map loading times.
-
- The script iterates over directories corresponding to specified zoom levels,
- checking each tile's file size against the provided threshold. Tiles smaller
- than the threshold are deleted, preserving only those tiles that meet or
- exceed the specified size criteria.
+ tiles that below a minimum file size. By selecting minimum file size and zoom
+ level range, users can precisely target and remove unnecessary tiles, reducing
+ storage requirements and potentially improve map loading times.
 
                               -------------------
-        date                 : 2024-02-08
+        author               : burak üstüner
+        date                 : 2024-02
         email                : burakustuner@gmail.com
         github               : github.com/burakustuner
  ***************************************************************************/
@@ -26,11 +21,8 @@
  * This script is shared with the spirit of open collaboration and        *
  * improvement. You're encouraged to use, tweak, fold, spindle, or even   *
  * mutilate it as you see fit under the generous terms of the GNU General *
- * Public License (GPL) version 3 or later. The GPL is a beacon of        *
- * freedom for software, ensuring you always have the right to keep this  *
- * program free, share your modifications, or even learn from its inner   *
- * workings. For the full terms, check out the GPL on the Free Software   *
- * Foundation's website.                                                  *
+ * Public License (GPL) version 3 or later. For the full terms, check out *
+ * the GPL on the Free Software Foundation's website.                     *
 
  * Feel free to reach out if you have any questions, suggestions, or just *
  * want to chat about this project. I'm always open to discussing new     *
@@ -39,12 +31,11 @@
  ***************************************************************************/
 
 Usage:
-    - Configure the script with the directory path of the generated XYZ tiles,
+    - Configure the script with the directory of the generated XYZ tiles,
       the minimum file size for tiles to be retained, and the range of zoom
       levels to be cleaned.
-    - Execute the script in a Python environment. It will automatically traverse
-      the specified directory structure, removing any tiles that do not meet the
-      size criteria.
+    - Execute the script in a Python environment. It will automatically remove
+      any tiles that do not meet the size criteria.
 
 Parameters:
     config (dict): Configuration parameters for the tile cleaning process.
@@ -54,11 +45,8 @@ Parameters:
         - clear_zoom_max: Maximum zoom level at which cleaning should end.
 
 Notes:
-    - The script aims to enhance tile storage efficiency by eliminating
-      low-value tiles, potentially reducing overall storage needs and
-      improving the performance of web mapping applications.
-    - It is advisable to backup your tile data before running the cleaning
-      process, especially if applying the script to a production dataset.
+    - Backup your tile data before the cleaning process, especially if applying
+      script to a production dataset.
 """
 
 import os

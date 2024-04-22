@@ -1,16 +1,17 @@
 """
 /***************************************************************************
                                 XYZ Tile Watermarker
- Adds watermarks to generated XYZ tiles for copyright or branding purposes.
+ Adds watermarks to generated XYZ tiles.
 
- The XYZ Tile Watermarker script facilitates the addition of custom text watermarks
+ The XYZ Tile Watermarker script can be used to add custom text watermarks
  to tiles within specified zoom levels. This is especially useful for copyright
- protection, branding, or adding any pertinent information directly onto the map tiles.
- The script supports customization of the watermark text, font, size, color, and positioning,
- as well as the frequency of watermark application across the tiles.
+ protection, branding, or adding any meta information directly on the map tiles.
+ The script supports customization of the watermark text, font, size, color, and
+ positioning, as well as the frequency of watermark application across the tiles.
 
                               -------------------
-        date                 : 2024-02-08
+        author               : burak üstüner
+        date                 : 2024-02
         email                : burakustuner@gmail.com
         github               : github.com/burakustuner
  ***************************************************************************/
@@ -20,11 +21,8 @@
  * This script is shared with the spirit of open collaboration and        *
  * improvement. You're encouraged to use, tweak, fold, spindle, or even   *
  * mutilate it as you see fit under the generous terms of the GNU General *
- * Public License (GPL) version 3 or later. The GPL is a beacon of        *
- * freedom for software, ensuring you always have the right to keep this  *
- * program free, share your modifications, or even learn from its inner   *
- * workings. For the full terms, check out the GPL on the Free Software   *
- * Foundation's website.                                                  *
+ * Public License (GPL) version 3 or later. For the full terms, check out *
+ * the GPL on the Free Software Foundation's website.                     *
 
  * Feel free to reach out if you have any questions, suggestions, or just *
  * want to chat about this project. I'm always open to discussing new     *
@@ -35,9 +33,9 @@
 Usage:
     - Ensure the Pillow library (PIL) is installed for image processing.
     - Configure the script with paths, watermark text, font details, and
-      other parameters to match your specific requirements.
+      other parameters to match your requirements.
     - Run the script to apply watermarks to your tiles. The script processes
-      each tile within the specified zoom levels, adding watermarks according
+      each tile within the selected zoom levels, adding watermarks according
       to the configured frequency.
 
 Parameters:
@@ -53,10 +51,8 @@ Parameters:
         - watermark_frequency: Frequency of watermarking tiles (e.g., every 5th tile).
 
 Notes:
-    - The ability to apply watermarks selectively based on zoom level and frequency
-      allows for optimized processing and customization to meet various project needs.
-    - It is recommended to review the output to ensure watermarks do not obscure
-      important tile details and are in compliance with copyright laws.
+    - It's good idea to check the final result to make sure the watermarks don't hide
+      important details on your tiles.
 """
 
 from PIL import Image, ImageDraw, ImageFont
