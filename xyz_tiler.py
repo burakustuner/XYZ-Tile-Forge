@@ -145,7 +145,7 @@ def xyz_tiler(config):
     print("DONE...")   
 
     # Import necessary libraries from QGIS Python API
-    from qgis.analysis import QgsNativeAlgorithms
+    #from qgis.analysis import QgsNativeAlgorithms
     from qgis.core import (
         QgsApplication,
         QgsProject,    
