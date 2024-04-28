@@ -59,8 +59,9 @@ def xyz_tile_archiver(config):
         with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
             for root, dirs, files in os.walk(folder_path):
                 for file in files:
-                    file_path = os.path.join(root, file)
-                    zipf.write(file_path, os.path.relpath(file_path, archive_path))
+                    if not file.endswith('.zip'):  # Exclude .zip files from being archived
+                        file_path = os.path.join(root, file)
+                        zipf.write(file_path, os.path.relpath(file_path, archive_path))
 
     print(f"Archiving tiles from {archive_path} to {zip_file_path}...")
     zip_directory(archive_path, zip_file_path)
