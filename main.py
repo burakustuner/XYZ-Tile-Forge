@@ -20,9 +20,9 @@
  * Public License (GPL) version 3 or later. For the full terms, check out *
  * the GPL on the Free Software Foundation's website.                     *
  *                                                                        *
- * Feel free to reach out if you have any questions, suggestions, or just *
+ * Feel free to reach out if you have  any questions, suggestions, or just *
  * want to chat about this project. I'm always open to discussing new     *
- * ideas, collaboration, or helping out where I can.                      *
+ * ideas, collaboration, or helping out where I can.                     *
  *                                                                        *
  ***************************************************************************/
 
@@ -37,12 +37,14 @@
  *     processing capabilities. Additionally, it automatically detects the *
  *     extent of raster files given.                                       *
  *                                                                         *
- *     The script is divided into four main parts:                         *
+ *     The script is divided into five main parts:                         *
  *         - xyz_tiler: Generates XYZ tiles from a specified raster layer. *
  *         - xyz_tile_cleaner: Cleans the generated tiles by removing      *
  *           files below a specified file size threshold.                  *
  *         - xyz_tile_watermarker: Adds watermark to specified levels of   *
- *           tiles.                                                        *
+ *           tiles.
+ *         - xyz_tile_pathsaver: Saves the paths of processed tiles into a *
+ *           text file for documentation and further processing.                                                  *
  *         - xyz_tile_archiver: Archives the processed tiles into a zip    *
  *           file for easy distribution and storage.                       *
  *                                                                         *
