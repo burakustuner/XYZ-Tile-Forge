@@ -119,6 +119,7 @@ def main():
     parser.add_argument('-o', '--output', required=True, help='Path to the output directory for XYZ tiles.')
     parser.add_argument('-min', '--minlayer', required=True, help= 'Minimum zoom layer for XYZ tiles.')
     parser.add_argument('-max', '--maxlayer', required=True, help='Maximum zoom layer for XYZ tiles.')
+    parser.add_argument('-clear', '--clear', required=False, help='Remove tiles below threshold.')
     parser.add_argument('-mark', '--watermark', required=False, help='Watermark text to be applied')
     parser.add_argument('-zip', '--zip', action='store_true', help='Enable archiving of the output directory into a zip file.')  # Sıkıştırma opsiyonu eklendi
     parser.add_argument('-plog', '--pathlog', action='store_true', help='Enable creating a pathway list of xyz tiles.')
@@ -156,7 +157,7 @@ def main():
     cleaner_config = {
         "clear_zoom_min": 1,
         "clear_zoom_max": 25,
-        "clear_size_min": 1800,  # 1800 for jpeg 85, 5169 for png
+        "clear_size_min": args.clear,  # 1800 for jpeg 85, 5169 for png
         "clear_path": tiler_config['xyz_output_path']
         #"clear_path": "E:/XYZ_Tiles/output"
     }
@@ -190,8 +191,15 @@ def main():
 
     # Call the functions
     start_time = datetime.now()
-    xyz_tiler(tiler_config)
-    xyz_tile_cleaner(cleaner_config)
+
+    if args.input:
+        xyz_tiler(tiler_config)
+    else:
+        print("No raster file specified. Proceeding without generating XYZ tiles. [-i  'E:/XYZ_Tiles/originals/EPB/EB1/MAGA DGBH/Maga.ecw']")
+    if args.clean:
+        xyz_tile_cleaner(cleaner_config)
+    else:
+        print("Cleainng process skipped. [-clear 1800] ")
     if args.watermark:
         xyz_tile_watermarker(watermarker_config)
     else:
