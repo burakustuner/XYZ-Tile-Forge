@@ -142,8 +142,9 @@ def xyz_tiler(config):
     # Set environment variables for other QGIS and PyQt5 components
     print("Setting environment variables for QT and Python...")    
     configure_environment_variables(config['qgis_main_path'])
-    print("DONE...")   
-
+    print("Environment settings are DONE...")
+    print("Process started for: ",config["xyz_raster_path"])
+    print("Starting QGIS Application. This may take a minute")
     # Import necessary libraries from QGIS Python API
     #from qgis.analysis import QgsNativeAlgorithms
     from qgis.core import (
