@@ -53,7 +53,7 @@ import os
 
 def xyz_tile_cleaner(config):
     clear_path = config['clear_path']
-    clear_size_min = config['clear_size_min']
+    clear_size_min = int(config['clear_size_min'])
     clear_zoom_min = config['clear_zoom_min']
     clear_zoom_max = config['clear_zoom_max']
     

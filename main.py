@@ -115,10 +115,10 @@ def main():
     
     # Creating the argument parser
     parser = argparse.ArgumentParser(description='XYZ Tile Forge: Automates the process of generating, cleaning, and watermarking XYZ tiles.')
-    parser.add_argument('-i', '--input', required=True, help='Path to the input raster file.')
+    parser.add_argument('-i', '--input', required=False, help='Path to the input raster file.')
     parser.add_argument('-o', '--output', required=True, help='Path to the output directory for XYZ tiles.')
-    parser.add_argument('-min', '--minlayer', required=True, help= 'Minimum zoom layer for XYZ tiles.')
-    parser.add_argument('-max', '--maxlayer', required=True, help='Maximum zoom layer for XYZ tiles.')
+    parser.add_argument('-min', '--minlayer', required=False, help= 'Minimum zoom layer for XYZ tiles.')
+    parser.add_argument('-max', '--maxlayer', required=False, help='Maximum zoom layer for XYZ tiles.')
     parser.add_argument('-clear', '--clear', required=False, help='Remove tiles below threshold.')
     parser.add_argument('-mark', '--watermark', required=False, help='Watermark text to be applied')
     parser.add_argument('-zip', '--zip', action='store_true', help='Enable archiving of the output directory into a zip file.')  # Sıkıştırma opsiyonu eklendi
@@ -196,7 +196,7 @@ def main():
         xyz_tiler(tiler_config)
     else:
         print("No raster file specified. Proceeding without generating XYZ tiles. [-i  'E:/XYZ_Tiles/originals/EPB/EB1/MAGA DGBH/Maga.ecw']")
-    if args.clean:
+    if args.clear:
         xyz_tile_cleaner(cleaner_config)
     else:
         print("Cleainng process skipped. [-clear 1800] ")
